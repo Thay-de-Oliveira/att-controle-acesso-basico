@@ -1,0 +1,80 @@
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.navbar-nav .nav-item .nav-link {
+    position: relative;
+    transition: color 0.2s ease-in-out;
+    padding: 15px 20px;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #6f42c1;
+}
+
+.navbar-nav .nav-item .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #6f42c1;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.navbar-nav .nav-item .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+    font-weight: bold;
+    border-bottom: 2px solid #6f42c1;
+    color: #6f42c1;
+}
+
+.navbar {
+    background-color: #d1c4e9 !important;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.form-check-label {
+    margin-left: 5px;
+}
+
+hr {
+    margin: 1rem 0;
+}
+
+.btn-primary {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    border-bottom: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #5a379e;
+    border-color: #5a379e;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="container mt-5">
+        <h2>Gráficos</h2>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('menu/navbar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+
+                    // Adiciona a classe 'active' ao item de menu apropriado
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.getAttribute('href') === currentPath) {
+                            link.parentElement.classList.add('active');
+                        }
+                    });
+
+                    // Verifica as permissões do usuário
+                    fetch('/get-user-permissions')
+                        .then(response => response.json())
+                        .then(data => {
+                            const adminLink = document.querySelector('a.nav-link[href="admin.html"]');
+                            if (!data.isAdmin) {
+                                adminLink.style.display = 'none';
+                            }
+                        })
+                        .catch(error => console.error('Error fetching permissions:', error));
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid vh-100 d-flex justify-content-center align-items-center p-0">
+        <div class="row w-100 h-100">
+            <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center left-side">
+                <img src="images/logo.png" alt="Logo Defesa Civil" class="logo">
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center right-side">
+                <div class="w-75 p-4">
+                    <h2 class="text-center fs-2 mb-4 fw-bold">Bem-vindo(a)</h2>
+                    <div id="loginMessage" class="alert alert-danger mt-3 d-none"></div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="loginEmail" placeholder="E-mail" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3 custom-button">ENTRAR</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/scripts.js"></script>
+</body>
+</html>

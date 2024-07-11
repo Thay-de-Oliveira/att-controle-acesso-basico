@@ -1,0 +1,40 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-fluid {
+    height: 100%;
+    padding: 0;
+}
+
+.left-side {
+    background-color: #100D28;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-side .logo {
+    max-width: 200%;
+    height: auto;
+    object-fit: cover;
+}
+
+.right-side {
+    background-color: #f8f9fa;
+}
+
+.custom-button {
+    background-color: #6f42c1;
+    border: none;
+}
+
+.right-side .w-75 {
+    max-width: 450px;
+}
+
+h2 {
+    font-size: 28px;
+}

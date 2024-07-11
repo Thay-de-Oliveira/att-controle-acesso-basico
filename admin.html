@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title">Lista de Usuários</h2>
+                        <hr>
+                        <div id="userList" class="mb-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-subtitle mb-3">Cadastro de Usuários</h3>
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="name">Nome</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Número do Telefone</label>
+                                <input type="text" class="form-control" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Definir Senha</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input type="checkbox" class="form-check-input" id="dashboardPermission">
+                                <label class="form-check-label" for="dashboardPermission">Visualizar Dashboard</label>
+                            </div>
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" id="reportsPermission">
+                                <label class="form-check-label" for="reportsPermission">Visualizar Relatórios</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-3 custom-button">Cadastrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/scripts.js"></script>
+    <script>
+        // Carregar o navbar dinamicamente e definir o item ativo
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('menu/navbar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    // Adiciona a classe 'active' ao item de menu apropriado
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.getAttribute('href') === currentPath) {
+                            link.parentElement.classList.add('active');
+                        }
+                    });
+
+                    // Verifica se o usuário é administrador
+                    checkAdmin();
+
+                    // Carregar a lista de usuários
+                    loadUsers();
+                });
+
+            // Registrar o evento de submit do formulário de registro
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', handleRegisterSubmit);
+        });
+
+        const handleRegisterSubmit = async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const dashboard = document.getElementById('dashboardPermission').checked;
+            const reports = document.getElementById('reportsPermission').checked;
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, phone, email, password, dashboard, reports })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Ops! Erro ao cadastrar usuário');
+                }
+
+                alert('Registro realizado com sucesso');
+                loadUsers(); // Recarregar a lista de usuários
+            } catch (error) {
+                console.error('Ops! Erro ao cadastrar usuário:', error);
+                alert(error.message || 'Erro ao registrar usuário =/');
+            }
+        };
+
+        // Função para carregar a lista de usuários do banco de dados
+        function loadUsers() {
+            fetch('/get-users')
+                .then(response => response.json())
+                .then(users => {
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = '';
+                    users.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.classList.add('user-item', 'mb-2', 'p-2', 'border', 'rounded');
+                        userItem.innerHTML = `
+                            <p><strong>Nome:</strong> ${user.name}</p>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <div>
+                                <input type="checkbox" class="form-check-input" id="dashboard_${user.id}" ${user.dashboard ? 'checked' : ''}>
+                                <label class="form-check-label" for="dashboard_${user.id}">Ver Dashboard</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" class="form-check-input" id="reports_${user.id}" ${user.reports ? 'checked' : ''}>
+                                <label class="form-check-label" for="reports_${user.id}">Ver Relatórios</label>
+                            </div>
+                            <button class="btn btn-primary btn-sm mt-2" onclick="saveUserPermission(${user.id})">Salvar Permissões</button>
+                        `;
+                        userList.appendChild(userItem);
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar a lista de usuários:', error));
+        }
+
+        // Função para salvar permissões de um usuário específico
+        function saveUserPermission(userId) {
+            const dashboardPermission = document.getElementById(`dashboard_${userId}`).checked;
+            const reportsPermission = document.getElementById(`reports_${userId}`).checked;
+
+            fetch('/save-permissions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: userId, dashboard: dashboardPermission, reports: reportsPermission })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    alert('Permissões salvas com sucesso!');
+                })
+                .catch(error => console.error('Ops! Erro ao salvar permissões', error));
+        }
+
+        // Função para verificar se o usuário é administrador
+        function checkAdmin() {
+            fetch('/check-admin')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.isAdmin) {
+                        const adminLink = document.querySelector('a.nav-link[href="admin.html"]');
+                        if (adminLink) {
+                            adminLink.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => console.error('Erro ao verificar administrador:', error));
+        }
+    </script>
+</body>
+</html>

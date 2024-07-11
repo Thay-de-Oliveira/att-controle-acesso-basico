@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="container mt-5">
+        <h2>Relatórios</h2>
+    </div>
+    <script src="js/scripts.js"></script>
+    <script>
+        // Carregar o navbar dinamicamente e definir o item ativo
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('menu/navbar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    // Adiciona a classe 'active' ao item de menu apropriado
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.getAttribute('href') === currentPath) {
+                            link.parentElement.classList.add('active');
+                        }
+                    });
+
+                    // Carregar permissões do localStorage
+                    loadPermissions();
+
+                    // Esconder ou mostrar links baseados em permissões
+                    const dashboardPermission = document.getElementById('dashboardPermission');
+                    const reportsPermission = document.getElementById('reportsPermission');
+
+                    toggleLinkVisibility(dashboardPermission, 'dashboard.html');
+                    toggleLinkVisibility(reportsPermission, 'reports.html');
+                });
+        });
+
+        // Função para alternar a visibilidade dos links
+        function toggleLinkVisibility(permissionCheckbox, linkHref) {
+            const link = document.querySelector(`a.nav-link[href="${linkHref}"]`);
+            if (permissionCheckbox && link) {
+                if (permissionCheckbox.checked) {
+                    link.style.display = 'block';
+                } else {
+                    link.style.display = 'none';
+                }
+            }
+        }
+
+        // Função para carregar permissões do localStorage
+        function loadPermissions() {
+            const savedPermissions = localStorage.getItem('permissions');
+            if (savedPermissions) {
+                const permissions = JSON.parse(savedPermissions);
+                document.getElementById('dashboardPermission').checked = permissions.dashboard;
+                document.getElementById('reportsPermission').checked = permissions.reports;
+            }
+        }
+    </script>
+</body>
+</html>

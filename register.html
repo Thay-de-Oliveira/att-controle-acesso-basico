@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid vh-100 d-flex justify-content-center align-items-center p-0">
+        <div class="row w-100 h-100">
+            <div class="col-md-6 d-none d-md-flex justify-content-center align-items-center left-side">
+                <img src="images/logo.png" alt="Logo Defesa Civil" class="logo">
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center right-side">
+                <div class="w-75 p-4">
+                    <h2 class="text-center fs-2 mb-4 fw-bold">Registre-se</h2>
+                    <div id="registerMessage" class="alert alert-success mt-3 d-none"></div>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Número do Telefone</label>
+                            <input type="text" class="form-control" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Defina sua Senha</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3 custom-button">Registrar</button>
+                    </form>
+                    <div id="successMessage" class="mt-3 d-none">
+                        <p class="text-success">Registro realizado com sucesso</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/scripts.js"></script>
+</body>
+</html>
